@@ -9,5 +9,5 @@ package DatabaseModule;
  * @author Ariel
  */
 public abstract class LocalDatabaseConnector extends DatabaseConnector{
-    
+  
 }

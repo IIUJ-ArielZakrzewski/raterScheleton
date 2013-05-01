@@ -12,10 +12,17 @@ import java.util.ArrayList;
  */
 public class DataRow extends DataComponent{
 
-    
+    String name;
     public DataRow()
     {
         row = new ArrayList<>();
+    }
+    
+    public DataRow(String nazwa)
+    {
+        row = new ArrayList<>();
+        name = nazwa;
+        addAttribute("name", name);
     }
     
     @Override
