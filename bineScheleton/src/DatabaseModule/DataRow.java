@@ -4,6 +4,7 @@
  */
 package DatabaseModule;
 
+import Dialogs.ErrorDialog;
 import java.util.ArrayList;
 
 /**
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  */
 public class DataRow extends DataComponent{
 
-    String name;
+    
     public DataRow()
     {
         row = new ArrayList<>();
@@ -37,93 +38,15 @@ public class DataRow extends DataComponent{
                 row.add(a);
             }
         } else {
-            //Wyświetlanie okna dialogowego o errorze błędnego typu dla argumentu wejściowego
+            ErrorDialog errorDialog = new ErrorDialog(true, "Błędny typ danych: DataComponent, oczekiwany: DataRow.", "DataRow", "Method: set(DataComponent component)", "component");
+            errorDialog.setVisible(true);
         }
     }
     
-    public void addAttribute(String name)
+    public boolean isEmpty()
     {
-        for(DataCell a : row)
-        {
-            if(a.name.equals(name))
-            {
-                //Wyświetlanie okna dialogowego o errorze istniejęcego atrybutu a danej nazwie
-                return;
-            }
-        }
-        DataCell newCell = new DataCell(name);
-        row.add(newCell);
+        return row.isEmpty();
     }
     
-    public void addAttribute(String name, String value)
-    {
-        for(DataCell a : row)
-        {
-            if(a.name.equals(name))
-            {
-                //Wyświetlanie okna dialogowego o errorze istniejęcego atrybutu a danej nazwie
-                return;
-            }
-        }
-        DataCell newCell = new DataCell(name,value);
-        row.add(newCell);
-    }
-    
-    public void removeAttribute(String name)
-    {
-        for(DataCell a : row)
-        {
-            if(a.name.equals(name))
-            {
-                row.remove(a);
-                return;
-            }
-        }
-        //Wyświetlanie okna dialogowego o errorze nieistniejęcego atrybutu a danej nazwie
-    }
-    
-    public void insert(String name, String value)
-    {
-        for(DataCell a : row)
-        {
-            if(a.name.equals(name))
-            {
-                if(a.value == null)
-                {
-                    a.value = value;
-                } else {
-                    //Wyświetlanie okna dialogowego o errorze ustalonej wartości podczas insert
-                }
-                return;
-            }
-        }
-        addAttribute(name, value);
-    }
-    
-    public void update(String name, String value)
-    {
-        for(DataCell a : row)
-        {
-            if(a.name.equals(name))
-            {
-                a.value = value;
-                return;
-            }
-        }
-        //Wyświetlanie okna dialogowego o errorze nieistniejęcego atrybutu a danej nazwie
-    }
-    
-    public void remove(String name)
-    {
-        for(DataCell a : row)
-        {
-            if(a.name.equals(name))
-            {
-                a.value = null;
-                return;
-            }
-        }
-        //Wyświetlanie okna dialogowego o errorze nieistniejęcego atrybutu a danej nazwie
-    }
     
 }

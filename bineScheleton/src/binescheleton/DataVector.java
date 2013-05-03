@@ -4,12 +4,16 @@
  */
 package binescheleton;
 
+import DatabaseModule.DatabaseManager;
+
 /**
  *
  * @author Ariel
  */
 public class DataVector {
     public static volatile DataVector instance;
+    MainWindow parent;
+    public DatabaseManager dbManager;
     
     private DataVector()
     {
@@ -29,5 +33,15 @@ public class DataVector {
                     }
                 }
         return instance;
+    }
+    
+    public MainWindow getMainWindow()
+    {
+        return parent;
+    }
+    
+    public void setMainWindow(MainWindow window)
+    {
+        parent = window;
     }
 }

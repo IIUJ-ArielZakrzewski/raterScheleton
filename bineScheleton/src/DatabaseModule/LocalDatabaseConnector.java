@@ -10,4 +10,5 @@ package DatabaseModule;
  */
 public abstract class LocalDatabaseConnector extends DatabaseConnector{
   
+    public abstract boolean checkTable(String nazwa);
 }

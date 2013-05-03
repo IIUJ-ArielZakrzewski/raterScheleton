@@ -4,7 +4,7 @@
  */
 package Models.Opinions;
 
-import DatabaseModule.DataComponent;
+import DatabaseModule.DataRow;
 import Models.Attributes.AbstractAttribute;
 import java.util.List;
 /**
@@ -14,6 +14,6 @@ import java.util.List;
 public abstract class AbstractOpinion {
     double totalRate;
     String opinion;
-    DataComponent row;
+    public DataRow row;
     List<AbstractAttribute> attributes;
 }

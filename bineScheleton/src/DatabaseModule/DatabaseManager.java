@@ -4,6 +4,8 @@
  */
 package DatabaseModule;
 
+import Dialogs.ErrorDialog;
+import Models.Attributes.AbstractAttribute;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
@@ -37,7 +39,8 @@ public class DatabaseManager {
         
         if(local.select(row).isEmpty())
         {
-            //Wyświetl error o braku usera w bazie danych
+            ErrorDialog errorDialog = new ErrorDialog(true, "User o nazwie: " + name + " nie istnieje.", "DatabaseManager", "login(String name, String password)", "name");
+            errorDialog.setVisible(true);
         }
         DataRow user = local.select(row).get(0);
         for(DataCell cell : user.row)
@@ -49,7 +52,8 @@ public class DatabaseManager {
                     userName = name;
                     //Wyświetl komunikat o udanym zalogowaniu
                 } else {
-                    //Wyświetl error o błędnym haśle
+                    ErrorDialog errorDialog = new ErrorDialog(true, "Hasło dla usera o nazwie: " + name + " jest nieprawidłowe.", "DatabaseManager", "login(String name, String password)", "password");
+                    errorDialog.setVisible(true);
                 }
             }
         }
@@ -64,7 +68,8 @@ public class DatabaseManager {
         }
         if(!select(row).isEmpty())
         {
-            //Wyświetl error o istniejącym obiekcie w bazie danych
+            ErrorDialog errorDialog = new ErrorDialog(true, "W bazie danych istnieje wpis o podanych parametrach.", "DatabaseManager", "insert(DataRow row)", "row");
+            errorDialog.setVisible(true);
             return false;
         }
         boolean result;
@@ -90,7 +95,8 @@ public class DatabaseManager {
                 }
             }
         } catch(Exception e) {
-            //Wyświetl okno o błędzie insertu do bazy danych
+            ErrorDialog errorDialog = new ErrorDialog(true, "Błąd operacji w bazie danych: \n" +  e.getMessage(), "DatabaseManager", "insert(DataRow row)", "row");
+            errorDialog.setVisible(true);
             result = false;
         }
         return result;
@@ -112,7 +118,8 @@ public class DatabaseManager {
                 result = result && server.update(parameters, row);
             }
         } catch(Exception e) {
-            //Wyświetl okno o błędzie update do bazy danych
+            ErrorDialog errorDialog = new ErrorDialog(true, "Błąd operacji w bazie danych: \n" +  e.getMessage(), "DatabaseManager", "update(DataRow parameters, DataRow row)", "row");
+            errorDialog.setVisible(true);
             result = false;
         }
         return result;
@@ -140,7 +147,8 @@ public class DatabaseManager {
                 server.insert(removed);
             }
         } catch(Exception e) {
-            //Wyświetl okno o błędzie remove do bazy danych
+            ErrorDialog errorDialog = new ErrorDialog(true, "Błąd operacji w bazie danych: \n" +  e.getMessage(), "DatabaseManager", "remove(DataRow row)", "row");
+            errorDialog.setVisible(true);
             result = false;
         }
         return result;
@@ -148,14 +156,27 @@ public class DatabaseManager {
     public List<DataRow> select(DataRow parameters)
     {
         synchronize();
-        return local.select(parameters);
+        List<DataRow> result = local.select(parameters);
+        for(DataRow row : result)
+        {
+            if(row.containsAttribute("date"))
+            {
+                row.removeAttribute("date");
+            }
+            if(row.containsAttribute("userName"))
+            {
+                row.removeAttribute("userName");
+            }
+        }
+        return result;
     }
     
     public boolean createUser(DataRow row)
     {
         if(!select(row).isEmpty())
         {
-            //Wyświetl error o istniejącym obiekcie w bazie danych
+            ErrorDialog errorDialog = new ErrorDialog(true, "W bazie danych istnieje wpis o podanych parametrach.", "DatabaseManager", "createUser(DataRow row)", "row");
+            errorDialog.setVisible(true);
             return false;
         }
         boolean result;
@@ -179,7 +200,8 @@ public class DatabaseManager {
                 }
             }
         } catch(Exception e) {
-            //Wyświetl okno o błędzie insertu do bazy danych
+            ErrorDialog errorDialog = new ErrorDialog(true, "Błąd operacji w bazie danych: \n" +  e.getMessage(), "DatabaseManager", "createUser(DataRow row)", "row");
+            errorDialog.setVisible(true);
             result = false;
         }
         return result;
@@ -327,6 +349,8 @@ public class DatabaseManager {
         
         if(local.select(row).isEmpty())
         {
+            ErrorDialog errorDialog = new ErrorDialog(true, "User nie istnieje lub nie jest zalogowany.", "DatabaseManager", "checkUser()", "local variable userName");
+            errorDialog.setVisible(true);
             return false;
         }
         return true;
@@ -339,5 +363,10 @@ public class DatabaseManager {
         row.addAttribute("date", data.toString());
         row.addAttribute("userName", userName);
         return row;
+    }
+    
+    public boolean isAtrribute(String typ)
+    {
+        return local.checkTable(typ);
     }
 }

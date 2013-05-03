@@ -4,12 +4,13 @@
  */
 package DatabaseModule;
 
+import Dialogs.ErrorDialog;
+
 /**
  *
  * @author Ariel
  */
 public class DataCell extends DataComponent{
-    String name;
     String value;
 
     public DataCell(String nazwa)
@@ -33,7 +34,8 @@ public class DataCell extends DataComponent{
             value = arg.value;
             tableName = arg.tableName;
         } else {
-            //Wyświetlanie okna dialogowego o errorze błędnego typu
+            ErrorDialog errorDialog = new ErrorDialog(true, "Błędny typ danych: DataComponent, oczekiwany: DataCell.", "DataCell", "Method: set(DataComponent component)", "component");
+            errorDialog.setVisible(true);
         }
     }
     
@@ -42,4 +44,14 @@ public class DataCell extends DataComponent{
         value = wartosc;
     }
     
+    
+    public String getValue()
+    {
+        return value;
+    }
+    
+    public void setValue(String newValue)
+    {
+        value = newValue;
+    }
 }

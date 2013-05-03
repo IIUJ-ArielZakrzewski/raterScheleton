@@ -20,4 +20,5 @@ public abstract class DatabaseConnector {
     public abstract boolean update(DataRow parameters, DataRow row);
     public abstract boolean remove(DataRow row);
     public abstract List<DataRow> select(DataRow parameters);
+    
 }
