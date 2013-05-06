@@ -4,10 +4,18 @@
  */
 package CalculationModule;
 
+import Models.Opinions.AbstractOpinion;
+
 /**
  *
  * @author Ariel
  */
-public class CalculationBase {
+public abstract class CalculationBase {
+    String name;
+    public abstract double recalculateRate(AbstractOpinion opinion);
     
+    public String getName()
+    {
+        return name;
+    }
 }

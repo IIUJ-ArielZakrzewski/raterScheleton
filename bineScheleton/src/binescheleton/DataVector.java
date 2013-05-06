@@ -4,20 +4,27 @@
  */
 package binescheleton;
 
+import CalculationModule.CalculationBase;
 import DatabaseModule.DatabaseManager;
+import EnumModule.EnumBase;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
  * @author Ariel
  */
 public class DataVector {
-    public static volatile DataVector instance;
+    static volatile DataVector instance;
     MainWindow parent;
     public DatabaseManager dbManager;
+    List<CalculationBase> calculations;
+    List<EnumBase> enums;
     
     private DataVector()
     {
-        
+        calculations = new LinkedList<>();
+        enums = new LinkedList<>();
     }
     
     public static DataVector getInstance()
@@ -43,5 +50,23 @@ public class DataVector {
     public void setMainWindow(MainWindow window)
     {
         parent = window;
+    }
+    
+    private void addCalculation(CalculationBase calc)
+    {
+        calculations.add(calc);
+    }
+    
+    public CalculationBase getCalculation(String nazwa)
+    {
+        for(CalculationBase c : calculations)
+        {
+            if(c.getName().equals(nazwa))
+            {
+                return c;
+            }
+        }
+        
+        return null;
     }
 }

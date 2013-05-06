@@ -7,6 +7,7 @@ package Models.Objects;
 import DataModule.Parameter;
 import DatabaseModule.DataCell;
 import DatabaseModule.DataRow;
+import Dialogs.ErrorDialog;
 import Models.Attributes.AbstractAttribute;
 import Models.Opinions.AbstractOpinion;
 import binescheleton.DataVector;
@@ -23,6 +24,10 @@ public abstract class AbstractObject {
     AbstractOpinion opinion;
     List<AbstractAttribute> attributes;
     List<Parameter> parameters;
+    
+    public abstract void createOpinion();
+    public abstract void createOpinion(DataRow row);
+    public abstract void changeOpinion();
     
     public AbstractObject()
     {
@@ -96,10 +101,6 @@ public abstract class AbstractObject {
         row = obiekt;
     }
     
-    public abstract void createOpinion();
-    public abstract void createOpinion(DataRow row);
-    public abstract void changeOpinion();
-    
     public void removeOpinion()
     {
         DataVector.getInstance().dbManager.remove(opinion.row);
@@ -120,7 +121,13 @@ public abstract class AbstractObject {
     {
         Parameter p = getParameter(nazwa);
         p.setValue(wartosc);
-        row.update(p.getName(), p.getValue());
+        if(row.containsAttribute(p.getName()))
+        {
+            row.update(p.getName(), p.getValue());
+        } else {
+            row.insert(p.getName(), p.getValue());
+        }
+        
     }
     
     public void removeParameter(String nazwa)
@@ -152,7 +159,13 @@ public abstract class AbstractObject {
             if(atrybut.getType().equals(nazwa))
             {
                 atrybut.load(DataVector.getInstance().dbManager.select(parametry).get(0));
-                row.update(nazwa, wartosc);
+                if(row.containsAttribute(atrybut.getName()))
+                {
+                    row.update(nazwa, wartosc);
+                } else {
+                    row.insert(nazwa, wartosc);
+                }
+                
             }
         }
     }
@@ -173,6 +186,10 @@ public abstract class AbstractObject {
     
     public void save()
     {
+        //W klasie docelowej należy sprawdzić, czy row.isEmpty()
+        //jeśli tak, to należy nadać nazwę tabeli, do ktrej zostanie wstawiony wiersz
+        //należy to zrobić za pomocą row.setTableName(<nazwa>);
+        //Dopiero potem należy wywołać save z klasy bazowej
         if(row.isEmpty())
         {
             row.addAttribute("name", name);
@@ -187,10 +204,47 @@ public abstract class AbstractObject {
             }
             DataVector.getInstance().dbManager.insert(row);
         } else {
-            row.update("name", name);
             row.update("description", description);
-            DataVector.getInstance().dbManager.update(row, row);
+            DataRow param = new DataRow(row.getName());
+            param.setTableName(row.getTableName());
+            DataVector.getInstance().dbManager.update(param, row);
         }
+    }
+            
+    public String getName()
+    {
+        return name;
+    }
+    
+    public void setName(String newName)
+    {
+        if(name.equals(""))
+        {
+            name = newName;
+        } else {
+            ErrorDialog errorDialog = new ErrorDialog(true, "Nie można zmienić istniejącej nazwy.", "AbstractObject", "Method: setName", "newName");
+            errorDialog.show();
+        }
+    }
+    
+    public String getDescription()
+    {
+        return description;
+    }
+    
+    public void setDescription(String newDescription)
+    {
+        description = newDescription;
+    }
+    
+    public AbstractOpinion getOpinion()
+    {
+        return opinion;
+    }
+    
+    public void setOpinion(AbstractOpinion newOpinion)
+    {
+        opinion = newOpinion;
     }
     
     
