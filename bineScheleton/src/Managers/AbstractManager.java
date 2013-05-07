@@ -21,6 +21,8 @@ public abstract class AbstractManager {
     
     public abstract void addSubject();
     public abstract void addOpinion();
+    public abstract void loadData();
+    public abstract void refreshData();
     
     public void editSubject(DataRow row)
     {
@@ -99,4 +101,6 @@ public abstract class AbstractManager {
             }
         }
     }
+    
+    
 }
