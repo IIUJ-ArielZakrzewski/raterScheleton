@@ -87,10 +87,6 @@ public abstract class AbstractOpinion {
                 }
             }
         }
-        //W klasie pochodnej powinna zostać przeładowana ta metoda
-        //Następnie powinna zostać wywołana z klasy bazowej
-        //A następnie poniższa linia powinna zostać dodana, z uwzględnieniem odpowiedniej nazwy
-        //totalRate = DataVector.getInstance().getCalculation(<nazwa>).recalculateRate(this);
     }
     
     public void removeAttribute(String nazwa)
@@ -105,10 +101,6 @@ public abstract class AbstractOpinion {
                 row.update(nazwa, "");
             }
         }
-        //W klasie pochodnej powinna zostać przeładowana ta metoda
-        //Następnie powinna zostać wywołana z klasy bazowej
-        //A następnie poniższa linia powinna zostać dodana, z uwzględnieniem odpowiedniej nazwy
-        //totalRate = DataVector.getInstance().getCalculation(<nazwa>).recalculateRate(this);
     }
     
     public void save()

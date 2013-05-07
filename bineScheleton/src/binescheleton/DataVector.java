@@ -52,7 +52,7 @@ public class DataVector {
         parent = window;
     }
     
-    private void addCalculation(CalculationBase calc)
+    public void addCalculation(CalculationBase calc)
     {
         calculations.add(calc);
     }

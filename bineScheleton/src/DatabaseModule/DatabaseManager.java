@@ -39,25 +39,47 @@ public class DatabaseManager {
         
         if(local.select(row).isEmpty())
         {
-            ErrorDialog errorDialog = new ErrorDialog(true, "User o nazwie: " + name + " nie istnieje.", "DatabaseManager", "login(String name, String password)", "name");
-            errorDialog.setVisible(true);
-        }
-        DataRow user = local.select(row).get(0);
-        for(DataCell cell : user.row)
-        {
-            if(cell.name.equals("password"))
+            
+            if(server.select(row).isEmpty())
             {
-                if(cell.value.equals(password))
+                ErrorDialog errorDialog = new ErrorDialog(true, "User o nazwie: " + name + " nie istnieje.", "DatabaseManager", "login(String name, String password)", "name");
+                errorDialog.setVisible(true);
+            } else {
+                DataRow user = local.select(row).get(0);
+                local.insert(user);
+                synchronize();
+                for(DataCell cell : user.row)
                 {
-                    userName = name;
-                    //Wyświetl komunikat o udanym zalogowaniu
-                } else {
-                    ErrorDialog errorDialog = new ErrorDialog(true, "Hasło dla usera o nazwie: " + name + " jest nieprawidłowe.", "DatabaseManager", "login(String name, String password)", "password");
-                    errorDialog.setVisible(true);
+                    if(cell.name.equals("password"))
+                    {
+                        if(cell.value.equals(password))
+                        {
+                            userName = name;
+                            //Wyświetl komunikat o udanym zalogowaniu
+                        } else {
+                            ErrorDialog errorDialog = new ErrorDialog(true, "Hasło dla usera o nazwie: " + name + " jest nieprawidłowe.", "DatabaseManager", "login(String name, String password)", "password");
+                            errorDialog.setVisible(true);
+                        }
+                    }
+                }
+            }
+        } else {
+            DataRow user = local.select(row).get(0);
+            for(DataCell cell : user.row)
+            {
+                if(cell.name.equals("password"))
+                {
+                    if(cell.value.equals(password))
+                    {
+                        userName = name;
+                        //Wyświetl komunikat o udanym zalogowaniu
+                    } else {
+                        ErrorDialog errorDialog = new ErrorDialog(true, "Hasło dla usera o nazwie: " + name + " jest nieprawidłowe.", "DatabaseManager", "login(String name, String password)", "password");
+                        errorDialog.setVisible(true);
+                    }
                 }
             }
         }
-        
     }
     
     public boolean insert(DataRow row)
@@ -66,7 +88,9 @@ public class DatabaseManager {
         {
             return false;
         }
-        if(!select(row).isEmpty())
+        DataRow parameter = new DataRow(row.getName());
+        parameter.setTableName(row.getTableName());
+        if(!select(parameter).isEmpty())
         {
             ErrorDialog errorDialog = new ErrorDialog(true, "W bazie danych istnieje wpis o podanych parametrach.", "DatabaseManager", "insert(DataRow row)", "row");
             errorDialog.setVisible(true);

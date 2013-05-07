@@ -8,7 +8,6 @@ import DatabaseModule.DataRow;
 import Dialogs.ErrorDialog;
 import Models.Objects.AbstractObject;
 import Models.Opinions.AbstractOpinion;
-import Panels.AbstractPanel;
 import binescheleton.DataVector;
 import java.util.List;
 
@@ -50,6 +49,15 @@ public abstract class AbstractManager {
         {
             ErrorDialog errorDialog = new ErrorDialog(true, "Nastąpił błąd w usuwaniu obiektu: " + row.getName() + ".", "AbstractManager", "Method: removeSubject(DataRow row)", "row");
             errorDialog.show();
+            return;
+        }
+        for(AbstractObject a : objects)
+        {
+            if(a.getName().equals(row.getName()))
+            {
+                objects.remove(a);
+                return;
+            }
         }
     }
     
@@ -80,6 +88,15 @@ public abstract class AbstractManager {
         {
             ErrorDialog errorDialog = new ErrorDialog(true, "Nastąpił błąd w usuwaniu opinii: " + row.getName() + ".", "AbstractManager", "Method: removeOpinion(DataRow row)", "row");
             errorDialog.show();
+            return;
+        }
+        for(AbstractOpinion a : opinions)
+        {
+            if(a.getName().equals(row.getName()))
+            {
+                opinions.remove(a);
+                return;
+            }
         }
     }
 }
