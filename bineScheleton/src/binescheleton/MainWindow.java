@@ -4,7 +4,10 @@
  */
 package binescheleton;
 
-import org.omg.CORBA.Environment;
+import DatabaseModule.DataRow;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JPanel;
 
 /**
  *
@@ -12,11 +15,15 @@ import org.omg.CORBA.Environment;
  */
 public class MainWindow extends javax.swing.JFrame {
 
+    List<JPanel> panels;
+    
     /**
      * Creates new form MainWindow
      */
-    public MainWindow() {
+    public MainWindow(DataRow row) {
         initComponents();
+        inicjujPanele(row);
+        mainPanel.setVisible(true);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -27,63 +34,280 @@ public class MainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        mainPanel = new javax.swing.JLayeredPane();
+        userPanel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        loginLabel = new javax.swing.JLabel();
+        nameLabel = new javax.swing.JLabel();
+        surnameLabel = new javax.swing.JLabel();
+        streetLabel = new javax.swing.JLabel();
+        surnameLabel2 = new javax.swing.JLabel();
+        numberLabel = new javax.swing.JLabel();
+        numberLocalLabel = new javax.swing.JLabel();
+        cityLabel = new javax.swing.JLabel();
+        postCodeLabel = new javax.swing.JLabel();
+        configPanel = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        fileMenu = new javax.swing.JMenu();
+        closeMenuItem = new javax.swing.JMenuItem();
+        editMenu = new javax.swing.JMenu();
+        userDetailsMenuItem = new javax.swing.JMenuItem();
+        optionsMenu = new javax.swing.JMenu();
+        configMenuItem = new javax.swing.JMenuItem();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
+        jLabel1.setText("Dane użytkownika");
+
+        loginLabel.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        loginLabel.setText("Login: ");
+
+        nameLabel.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        nameLabel.setText("Imię: ");
+
+        surnameLabel.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        surnameLabel.setText("Nazwisko: ");
+
+        streetLabel.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        streetLabel.setText("Ulica: ");
+
+        surnameLabel2.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        surnameLabel2.setText("Adres");
+
+        numberLabel.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        numberLabel.setText("Nr. domu: ");
+
+        numberLocalLabel.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        numberLocalLabel.setText("Nr. lokalu: ");
+
+        cityLabel.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        cityLabel.setText("Miasto: ");
+
+        postCodeLabel.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        postCodeLabel.setText("Kod pocztowy: ");
+
+        javax.swing.GroupLayout userPanelLayout = new javax.swing.GroupLayout(userPanel);
+        userPanel.setLayout(userPanelLayout);
+        userPanelLayout.setHorizontalGroup(
+            userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(userPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(userPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addContainerGap(352, Short.MAX_VALUE))
+                    .addGroup(userPanelLayout.createSequentialGroup()
+                        .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(surnameLabel)
+                            .addComponent(nameLabel)
+                            .addComponent(loginLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(numberLocalLabel)
+                            .addComponent(numberLabel)
+                            .addComponent(surnameLabel2)
+                            .addComponent(streetLabel)
+                            .addComponent(cityLabel)
+                            .addComponent(postCodeLabel))
+                        .addGap(220, 220, 220))))
+        );
+        userPanelLayout.setVerticalGroup(
+            userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(userPanelLayout.createSequentialGroup()
+                .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(userPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1)
+                        .addGap(46, 46, 46)
+                        .addComponent(loginLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(nameLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(surnameLabel))
+                    .addGroup(userPanelLayout.createSequentialGroup()
+                        .addGap(66, 66, 66)
+                        .addComponent(surnameLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(streetLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(numberLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(numberLocalLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(postCodeLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cityLabel)))
+                .addContainerGap(172, Short.MAX_VALUE))
+        );
+
+        userPanel.setBounds(0, 0, 640, 400);
+        mainPanel.add(userPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
+        jLabel2.setText("Ustawienia programu");
+
+        javax.swing.GroupLayout configPanelLayout = new javax.swing.GroupLayout(configPanel);
+        configPanel.setLayout(configPanelLayout);
+        configPanelLayout.setHorizontalGroup(
+            configPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(configPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addContainerGap(300, Short.MAX_VALUE))
+        );
+        configPanelLayout.setVerticalGroup(
+            configPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(configPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addContainerGap(347, Short.MAX_VALUE))
+        );
+
+        configPanel.setBounds(0, 0, 640, 400);
+        mainPanel.add(configPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jMenuBar1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jMenuBar1.setPreferredSize(new java.awt.Dimension(56, 30));
+
+        fileMenu.setText("Plik");
+
+        closeMenuItem.setText("Zamknij");
+        closeMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeMenuItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(closeMenuItem);
+
+        jMenuBar1.add(fileMenu);
+
+        editMenu.setText("Edycja");
+
+        userDetailsMenuItem.setText("Dane użytkownika");
+        userDetailsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                userDetailsMenuItemActionPerformed(evt);
+            }
+        });
+        editMenu.add(userDetailsMenuItem);
+
+        jMenuBar1.add(editMenu);
+
+        optionsMenu.setText("Opcje");
+
+        configMenuItem.setText("Ustawienia");
+        configMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                configMenuItemActionPerformed(evt);
+            }
+        });
+        optionsMenu.add(configMenuItem);
+
+        jMenuBar1.add(optionsMenu);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(191, 191, 191)
+                .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 399, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /*
-         * Set the Nimbus look and feel
-         */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /*
-         * If Nimbus (introduced in Java SE 6) is not available, stay with the
-         * default look and feel. For details see
-         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void closeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeMenuItemActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_closeMenuItemActionPerformed
 
-        /*
-         * Create and display the form
-         */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+    private void configMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configMenuItemActionPerformed
+        activatePanel(configPanel);
+    }//GEN-LAST:event_configMenuItemActionPerformed
 
-            public void run() {
-                new MainWindow().setVisible(true);
-            }
-        });
-    }
+    private void userDetailsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userDetailsMenuItemActionPerformed
+        activatePanel(userPanel);
+    }//GEN-LAST:event_userDetailsMenuItemActionPerformed
+
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel cityLabel;
+    private javax.swing.JMenuItem closeMenuItem;
+    private javax.swing.JMenuItem configMenuItem;
+    private javax.swing.JPanel configPanel;
+    private javax.swing.JMenu editMenu;
+    private javax.swing.JMenu fileMenu;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JLabel loginLabel;
+    private javax.swing.JLayeredPane mainPanel;
+    private javax.swing.JLabel nameLabel;
+    private javax.swing.JLabel numberLabel;
+    private javax.swing.JLabel numberLocalLabel;
+    private javax.swing.JMenu optionsMenu;
+    private javax.swing.JLabel postCodeLabel;
+    private javax.swing.JLabel streetLabel;
+    private javax.swing.JLabel surnameLabel;
+    private javax.swing.JLabel surnameLabel2;
+    private javax.swing.JMenuItem userDetailsMenuItem;
+    private javax.swing.JPanel userPanel;
     // End of variables declaration//GEN-END:variables
+
+    //MainWindow control region
+    private void inicjujPanele(DataRow row)
+    {
+        panels = new ArrayList<>();
+        panels.add(userPanel);
+        panels.add(configPanel);
+        deactivateAllPanels();
+        userPanelInit(row);
+    }
+    
+    private void deactivateAllPanels()
+    {
+        for(JPanel p : panels)
+        {
+            p.setVisible(false);
+        }
+    }
+    
+    private void activatePanel(JPanel panel)
+    {
+        for(JPanel p : panels)
+        {
+            p.setVisible(false);
+            if(p == panel)
+            {
+                p.setVisible(true);
+            }
+        }
+    }
+    //MainWindow control region end
+    
+    //userPanel region
+    public void userPanelInit(DataRow row)
+    {
+        loginLabel.setText(loginLabel.getText() + row.getName());
+        nameLabel.setText(nameLabel.getText() + row.getAttribute("firstName").getValue());
+        surnameLabel.setText(surnameLabel.getText() + row.getAttribute("surname").getValue());
+        streetLabel.setText(streetLabel.getText() + row.getAttribute("street").getValue());
+        numberLabel.setText(numberLabel.getText() + row.getAttribute("number").getValue());
+        numberLocalLabel.setText(numberLocalLabel.getText() + row.getAttribute("secondNumber").getValue());
+        postCodeLabel.setText(postCodeLabel.getText() + row.getAttribute("postCode").getValue());
+        cityLabel.setText(cityLabel.getText() + row.getAttribute("city").getValue());
+    }
+    //userPanel region end
 }

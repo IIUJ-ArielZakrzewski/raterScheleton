@@ -5,7 +5,6 @@
 package DatabaseModule;
 
 import Dialogs.ErrorDialog;
-import Models.Attributes.AbstractAttribute;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
@@ -31,7 +30,7 @@ public class DatabaseManager {
         userName = "";
     }
     
-    public void login(String name, String password)
+    public boolean login(String name, String password)
     {
         DataRow row = new  DataRow();
         row.setTableName("users");
@@ -44,6 +43,7 @@ public class DatabaseManager {
             {
                 ErrorDialog errorDialog = new ErrorDialog(true, "User o nazwie: " + name + " nie istnieje.", "DatabaseManager", "login(String name, String password)", "name");
                 errorDialog.setVisible(true);
+                return false;
             } else {
                 DataRow user = local.select(row).get(0);
                 local.insert(user);
@@ -56,9 +56,11 @@ public class DatabaseManager {
                         {
                             userName = name;
                             //Wyświetl komunikat o udanym zalogowaniu
+                            return true;
                         } else {
                             ErrorDialog errorDialog = new ErrorDialog(true, "Hasło dla usera o nazwie: " + name + " jest nieprawidłowe.", "DatabaseManager", "login(String name, String password)", "password");
                             errorDialog.setVisible(true);
+                            return false;
                         }
                     }
                 }
@@ -73,13 +75,16 @@ public class DatabaseManager {
                     {
                         userName = name;
                         //Wyświetl komunikat o udanym zalogowaniu
+                        return true;
                     } else {
                         ErrorDialog errorDialog = new ErrorDialog(true, "Hasło dla usera o nazwie: " + name + " jest nieprawidłowe.", "DatabaseManager", "login(String name, String password)", "password");
                         errorDialog.setVisible(true);
+                        return false;
                     }
                 }
             }
         }
+        return false;
     }
     
     public boolean insert(DataRow row)
