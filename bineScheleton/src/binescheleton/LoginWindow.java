@@ -64,6 +64,11 @@ public class LoginWindow extends javax.swing.JFrame {
         });
 
         newUsetAccountButton.setText("Utwórz nowe konto");
+        newUsetAccountButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newUsetAccountButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -122,10 +127,10 @@ public class LoginWindow extends javax.swing.JFrame {
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         String login = loginTextField.getText();
-        String password = passwordField.getSelectedText();
+        String password = passwordField.getText();
         if(login.equals("") || password.equals(""))
         {
-            Dialogs.ErrorDialog dialog = new ErrorDialog(true, "Brak loginu lu hasła!", "LoginWindow", "login", "");
+            Dialogs.ErrorDialog dialog = new ErrorDialog(this, true, "Brak loginu lu hasła!", "LoginWindow", "login", "");
             dialog.setVisible(true);
             return;
         }
@@ -134,16 +139,24 @@ public class LoginWindow extends javax.swing.JFrame {
         {
             DataRow parameters = new DataRow();
             parameters.setTableName("users");
-            parameters.addAttribute("userName", login);
+            parameters.addAttribute("name", login);
             DataRow row = DataVector.getInstance().dbManager.select(parameters).get(0);
-            new MainWindow(row).setVisible(true);
+            MainWindow wind = new MainWindow(row);
+            DataVector.getInstance().setMainWindow(wind);
+            wind.setVisible(true);
             this.dispose();
             
         } else {
-            Dialogs.ErrorDialog dialog = new ErrorDialog(true, "Błąd logowania!", "LoginWindow", "login", "");
+            Dialogs.ErrorDialog dialog = new ErrorDialog(this, true, "Błąd logowania!", "LoginWindow", "login", "");
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_loginButtonActionPerformed
+
+    private void newUsetAccountButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newUsetAccountButtonActionPerformed
+        CreateAccountWindow window = new CreateAccountWindow();
+        window.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_newUsetAccountButtonActionPerformed
 
     /**
      * @param args the command line arguments

@@ -91,15 +91,19 @@ public class AbstractAttribute {
     
     public void save()
     {
+        DataRow parameter = new DataRow(name);
+        parameter.setTableName(type);
         if(row.isEmpty())
         {
             row.addAttribute("name", name);
             row.addAttribute("description", description);
+            row.setTableName(type);
             DataVector.getInstance().dbManager.insert(row);
         } else {
             row.update("name", name);
             row.update("description", description);
-            DataVector.getInstance().dbManager.update(row, row);
+            row.setTableName(type);
+            DataVector.getInstance().dbManager.update(parameter, row);
         }
         
     }

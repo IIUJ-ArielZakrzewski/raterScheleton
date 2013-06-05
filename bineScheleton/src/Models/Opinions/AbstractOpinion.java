@@ -4,6 +4,7 @@
  */
 package Models.Opinions;
 
+import DataModule.Parameter;
 import DatabaseModule.DataCell;
 import DatabaseModule.DataRow;
 import Models.Attributes.AbstractAttribute;
@@ -20,6 +21,7 @@ public abstract class AbstractOpinion {
     String opinion;
     public DataRow row;
     List<AbstractAttribute> attributes;
+    List<Parameter> parameters;
     
     public AbstractOpinion(String nazwa)
     {
@@ -28,11 +30,13 @@ public abstract class AbstractOpinion {
         opinion = "";
         row = new DataRow(nazwa);
         attributes = new LinkedList<>();
+        parameters = new LinkedList<>();
     }
     
     public AbstractOpinion(DataRow obiekt)
     {
         attributes = new LinkedList<>();
+        parameters = new LinkedList<>();
         for(DataCell cell : obiekt.row)
         {
             switch (cell.getName()) {
@@ -46,14 +50,55 @@ public abstract class AbstractOpinion {
                     totalRate = Double.parseDouble(cell.getValue());
                     break;
                 default:
-                    DataRow parametry = new DataRow();
-                    parametry.setTableName(cell.getName());
-                    parametry.addAttribute("name", cell.getValue());
-                    attributes.add(new AbstractAttribute(DataVector.getInstance().dbManager.select(parametry).get(0)));
+                    if(DataVector.getInstance().dbManager.isAtrribute(cell.getName()))
+                    {
+                        DataRow parametry = new DataRow();
+                        parametry.setTableName(cell.getName());
+                        parametry.addAttribute("name", cell.getValue());
+                        attributes.add(new AbstractAttribute(DataVector.getInstance().dbManager.select(parametry).get(0)));
+                    } else {
+                        parameters.add(new Parameter(cell.getName(), cell.getValue()));
+                    }
             }
         }
         
         row = obiekt;
+    }
+    
+    public Parameter getParameter(String nazwa)
+    {
+        for(Parameter p : parameters)
+        {
+            
+            if(p.getName().equals(nazwa))
+                return p;
+        }
+        return null;
+    }
+    
+    public void setParameter(String nazwa, String wartosc)
+    {
+        Parameter p = getParameter(nazwa);
+        if(p == null)
+        {
+            p = new Parameter(nazwa, wartosc);
+            parameters.add(p);
+        } else {
+            p.setValue(wartosc);
+        }
+        if(row.containsAttribute(p.getName()))
+        {
+            row.update(p.getName(), p.getValue());
+        } else {
+            row.insert(p.getName(), p.getValue());
+        }
+        
+    }
+    
+    public void removeParameter(String nazwa)
+    {
+        getParameter(nazwa).setValue("");
+        row.update(getParameter(nazwa).getName(), getParameter(nazwa).getValue());
     }
     
     public AbstractAttribute getAttribute(String name)
@@ -114,17 +159,41 @@ public abstract class AbstractOpinion {
             row.addAttribute("name", name);
             row.addAttribute("rate", totalRate + "");
             row.addAttribute("opinion", opinion);
+            for(Parameter p : parameters)
+            {
+                row.addAttribute(p.getName(), p.getValue());
+            }
             for(AbstractAttribute a : attributes)
             {
                 row.addAttribute(a.getType(), a.getName());
             }
             DataVector.getInstance().dbManager.insert(row);
         } else {
-            row.update("rate", totalRate + "");
-            row.update("opinion", opinion);
+            if(row.containsAttribute("rate"))
+            {
+                row.update("rate", totalRate + "");
+            } else {
+                row.addAttribute("rate", totalRate + "");
+            }
+            
+            if(row.containsAttribute("opinion"))
+            {
+                row.update("opinion", opinion);
+            } else {
+                row.addAttribute("opinion", opinion);
+            }
+            
+            
             DataRow param = new DataRow(row.getName());
             param.setTableName(row.getTableName());
-            DataVector.getInstance().dbManager.update(param, row);
+            param.addAttribute("userName", DataVector.getInstance().dbManager.getUserName());
+            List<DataRow> res = DataVector.getInstance().dbManager.select(param);
+            if(!res.isEmpty())
+            {
+                DataVector.getInstance().dbManager.update(param, row);
+            } else {
+                DataVector.getInstance().dbManager.insert(row);
+            }
         }
     }
             
@@ -141,11 +210,33 @@ public abstract class AbstractOpinion {
     public void setOpinion(String newOpinion)
     {
         opinion = newOpinion;
+        if(row.containsAttribute("opinion"))
+        {
+            row.update("opinion", opinion);
+        } else {
+            row.addAttribute("opinion", opinion);
+        }
+    }
+    
+    public void setTotalRate(double newRate)
+    {
+        totalRate = newRate;
+        if(row.containsAttribute("rate"))
+        {
+            row.update("rate", totalRate + "");
+        } else {
+            row.addAttribute("rate", totalRate + "");
+        }
     }
     
     public double getTotalRate()
     {
         return totalRate;
+    }
+    
+    public DataRow getRow()
+    {
+        return row;
     }
     
 }

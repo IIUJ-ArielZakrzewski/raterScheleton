@@ -6,6 +6,8 @@ package binescheleton;
 
 import CalculationModule.CalculationBase;
 import DatabaseModule.DatabaseManager;
+import DatabaseModule.LocalDatabaseConnectorSqlServer;
+import DatabaseModule.ServerDatabaseConnectorEmpty;
 import EnumModule.EnumBase;
 import java.util.LinkedList;
 import java.util.List;

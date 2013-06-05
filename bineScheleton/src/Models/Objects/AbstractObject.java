@@ -72,7 +72,8 @@ public abstract class AbstractObject {
     
     public AbstractObject(DataRow obiekt, DataRow opinia)
     {
-        createOpinion(opinia);
+        //Należy w klasie pochodnej wywołać metodę
+        //createOpinie(opinia);
         attributes = new LinkedList<>();
         parameters = new LinkedList<>();
         for(DataCell cell : obiekt.row)
@@ -120,7 +121,12 @@ public abstract class AbstractObject {
     public void setParameter(String nazwa, String wartosc)
     {
         Parameter p = getParameter(nazwa);
-        p.setValue(wartosc);
+        if(p == null)
+        {
+            p = new Parameter(nazwa, wartosc);
+        } else {
+            p.setValue(wartosc);
+        }
         if(row.containsAttribute(p.getName()))
         {
             row.update(p.getName(), p.getValue());
@@ -207,7 +213,14 @@ public abstract class AbstractObject {
             row.update("description", description);
             DataRow param = new DataRow(row.getName());
             param.setTableName(row.getTableName());
-            DataVector.getInstance().dbManager.update(param, row);
+            param.addAttribute("userName", DataVector.getInstance().dbManager.getUserName());
+            List<DataRow> res = DataVector.getInstance().dbManager.select(param);
+            if(!res.isEmpty())
+            {
+                DataVector.getInstance().dbManager.update(param, row);
+            } else {
+                DataVector.getInstance().dbManager.insert(row);
+            }
         }
     }
             
@@ -221,9 +234,10 @@ public abstract class AbstractObject {
         if(name.equals(""))
         {
             name = newName;
+            row.addAttribute("name", name);
         } else {
             ErrorDialog errorDialog = new ErrorDialog(true, "Nie można zmienić istniejącej nazwy.", "AbstractObject", "Method: setName", "newName");
-            errorDialog.show();
+            errorDialog.setVisible(true);
         }
     }
     
@@ -235,6 +249,13 @@ public abstract class AbstractObject {
     public void setDescription(String newDescription)
     {
         description = newDescription;
+        if(row.containsAttribute("description"))
+        {
+            row.update("description", description);
+        } else {
+            row.addAttribute("description", description);
+        }
+        
     }
     
     public AbstractOpinion getOpinion()
@@ -245,6 +266,11 @@ public abstract class AbstractObject {
     public void setOpinion(AbstractOpinion newOpinion)
     {
         opinion = newOpinion;
+    }
+    
+    public DataRow getRow()
+    {
+        return row;
     }
     
     

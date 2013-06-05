@@ -23,6 +23,15 @@ public class ErrorDialog extends javax.swing.JDialog {
         eventName.setText(zdarzenie);
         variables.setText(variableNames);
     }
+    
+    public ErrorDialog(javax.swing.JFrame parent, boolean modal, String wiadomosc, String klasa, String zdarzenie, String variableNames) {
+        super(parent, modal);
+        initComponents();
+        message.setText(wiadomosc);
+        className.setText(klasa);
+        eventName.setText(zdarzenie);
+        variables.setText(variableNames);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

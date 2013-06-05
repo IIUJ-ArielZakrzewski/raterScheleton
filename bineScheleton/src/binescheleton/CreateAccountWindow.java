@@ -223,17 +223,17 @@ public class CreateAccountWindow extends javax.swing.JFrame {
         if(checkInput())
         {
             
-            if(!passwordField.getSelectedText().equals(confirmPasswordField.getSelectedText()))
+            if(!passwordField.getText().equals(confirmPasswordField.getText()))
             {
-                Dialogs.ErrorDialog errorDialog = new ErrorDialog(true, "Podane hasła są różne!", "CreateAccountWindow", "saveButtonActionPerformed", "");
+                Dialogs.ErrorDialog errorDialog = new ErrorDialog(this, true, "Podane hasła są różne!", "CreateAccountWindow", "saveButtonActionPerformed", "");
                 errorDialog.setVisible(true);
                 return;
             }
             
-            DataRow row = new DataRow();
+            DataRow row = new DataRow(loginTextField.getText());
             row.setTableName("users");
             row.setName(loginTextField.getText());
-            row.addAttribute("userPassword", passwordField.getSelectedText());
+            row.addAttribute("userPassword", passwordField.getText());
             row.addAttribute("firstName", nameTextField.getText());
             row.addAttribute("surname", surnameTextField.getText());
             row.addAttribute("street", streetTextField.getText());
@@ -244,28 +244,30 @@ public class CreateAccountWindow extends javax.swing.JFrame {
             try
             {
                 DataVector.getInstance().dbManager.createUser(row);
-                boolean result = DataVector.getInstance().dbManager.login(loginTextField.getText(), passwordField.getSelectedText());
+                boolean result = DataVector.getInstance().dbManager.login(loginTextField.getText(), passwordField.getText());
                 if(result)
                 {
                     DataRow parameters = new DataRow();
                     parameters.setTableName("users");
-                    parameters.addAttribute("userName", loginTextField.getText());
+                    parameters.addAttribute("name", loginTextField.getText());
                     row = DataVector.getInstance().dbManager.select(parameters).get(0);
-                    new MainWindow(row).setVisible(true);
+                    MainWindow wind = new MainWindow(row);
+                    DataVector.getInstance().setMainWindow(wind);
+                    wind.setVisible(true);
                     this.dispose();
 
                 } else {
-                    Dialogs.ErrorDialog dialog = new ErrorDialog(true, "Błąd logowania!", "LoginWindow", "login", "");
+                    Dialogs.ErrorDialog dialog = new ErrorDialog(this, true, "Błąd logowania!", "CreateAccountWindow", "login", "");
                     dialog.setVisible(true);
                     
                 }
             } catch(Exception e) {
-                Dialogs.ErrorDialog errorDialog = new ErrorDialog(true, e.getMessage(), "CreateAccountWindow", "saveButtonActionPerformed", "");
+                Dialogs.ErrorDialog errorDialog = new ErrorDialog(this, true, e.getMessage(), "CreateAccountWindow", "saveButtonActionPerformed", "");
                 errorDialog.setVisible(true);
             }
             
         } else {
-            Dialogs.ErrorDialog errorDialog = new ErrorDialog(true, "Nie wypełniono wymaganych pól!", "CreateAccountWindow", "saveButtonActionPerformed", "");
+            Dialogs.ErrorDialog errorDialog = new ErrorDialog(this, true, "Nie wypełniono wymaganych pól!", "CreateAccountWindow", "saveButtonActionPerformed", "");
             errorDialog.setVisible(true);
         }
     }//GEN-LAST:event_saveButtonActionPerformed
@@ -301,8 +303,8 @@ public class CreateAccountWindow extends javax.swing.JFrame {
         result = result && !loginTextField.getText().equals("");
         result = result && !nameTextField.getText().equals("");
         result = result && !surnameTextField.getText().equals("");
-        result = result && !passwordField.getSelectedText().equals("");
-        result = result && !confirmPasswordField.getSelectedText().equals("");
+        result = result && !passwordField.getText().equals("");
+        result = result && !confirmPasswordField.getText().equals("");
         result = result && !streetTextField.getText().equals("");
         result = result && !numberTextField.getText().equals("");
         result = result && !postCodeTextField.getText().equals("");

@@ -9,6 +9,7 @@ import Dialogs.ErrorDialog;
 import Models.Objects.AbstractObject;
 import Models.Opinions.AbstractOpinion;
 import binescheleton.DataVector;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -19,67 +20,43 @@ public abstract class AbstractManager {
     List<AbstractObject> objects;
     List<AbstractOpinion> opinions;
     
+    public AbstractManager()
+    {
+        objects = new LinkedList<>();
+        opinions = new LinkedList<>();
+    }
+    
     public abstract void addSubject();
-    public abstract void addOpinion();
+    public abstract void addOpinion(String subjectName);
     public abstract void loadData();
     public abstract void refreshData();
-    
-    public void editSubject(DataRow row)
-    {
-        AbstractObject subject = null;
-        for(AbstractObject o : objects)
-        {
-            if(o.getName().equals(row.getAttribute("name").getValue()))
-            {
-                subject = o;
-            }
-        }
-        
-        if(subject != null)
-        {
-            //wyświetlanie okna dialogowego do edycji obiektu
-        } else {
-            ErrorDialog errorDialog = new ErrorDialog(true, "Nie odnaleziono obiektu.", "AbstractManager", "Method: editSubject(DataRow row)", "subject, row");
-            errorDialog.show();
-        }
-    }
+    public abstract void editSubject(DataRow row);
+    public abstract void editOpinion(DataRow row);
     
     public void removeSubject(DataRow row)
     {
+        for(AbstractOpinion op : opinions)
+        {
+            if(op.getName().equals(row.getName()))
+            {
+                removeOpinion(op.row);
+            }
+        }
         boolean result = DataVector.getInstance().dbManager.remove(row);
         if(!result)
         {
             ErrorDialog errorDialog = new ErrorDialog(true, "Nastąpił błąd w usuwaniu obiektu: " + row.getName() + ".", "AbstractManager", "Method: removeSubject(DataRow row)", "row");
-            errorDialog.show();
+            errorDialog.setVisible(true);
             return;
         }
         for(AbstractObject a : objects)
         {
-            if(a.getName().equals(row.getName()))
+            if(a.getName().equals(row.getAttribute("name").getValue()))
             {
                 objects.remove(a);
+                refreshData();
                 return;
             }
-        }
-    }
-    
-    public void editOpinion(DataRow row)
-    {
-        AbstractOpinion subject = null;
-        for(AbstractOpinion o : opinions)
-        {
-            if(o.getName().equals(row.getAttribute("name").getValue()))
-            {
-                subject = o;
-            }
-        }
-        
-        if(subject != null)
-        {
-            //wyświetlanie okna dialogowego do edycji opinii
-        } else {
-            ErrorDialog errorDialog = new ErrorDialog(true, "Nie odnaleziono opinii.", "AbstractManager", "Method: editOpinion(DataRow row)", "subject, row");
-            errorDialog.show();
         }
     }
     
@@ -89,7 +66,7 @@ public abstract class AbstractManager {
         if(!result)
         {
             ErrorDialog errorDialog = new ErrorDialog(true, "Nastąpił błąd w usuwaniu opinii: " + row.getName() + ".", "AbstractManager", "Method: removeOpinion(DataRow row)", "row");
-            errorDialog.show();
+            errorDialog.setVisible(true);
             return;
         }
         for(AbstractOpinion a : opinions)
@@ -97,9 +74,37 @@ public abstract class AbstractManager {
             if(a.getName().equals(row.getName()))
             {
                 opinions.remove(a);
+                refreshData();
                 return;
             }
         }
+    }
+    
+    public List<AbstractObject> getObjects()
+    {
+        return objects;
+    }
+    
+    public AbstractObject getObject(String name)
+    {
+        for(AbstractObject o : objects)
+        {
+            if(o.getName().equals(name))
+            {
+                return o;
+            }
+        }
+        return null;
+    }
+    
+    public AbstractOpinion getOpinion(String name)
+    {
+        for(AbstractOpinion o : opinions)
+        {
+            if(o.getName().equals(name))
+                return o;
+        }
+        return null;
     }
     
     

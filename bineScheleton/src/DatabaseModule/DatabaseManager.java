@@ -34,7 +34,7 @@ public class DatabaseManager {
     {
         DataRow row = new  DataRow();
         row.setTableName("users");
-        row.addAttribute("userName", name);
+        row.addAttribute("name", name);
         
         if(local.select(row).isEmpty())
         {
@@ -69,7 +69,7 @@ public class DatabaseManager {
             DataRow user = local.select(row).get(0);
             for(DataCell cell : user.row)
             {
-                if(cell.name.equals("password"))
+                if(cell.name.equals("userPassword"))
                 {
                     if(cell.value.equals(password))
                     {
@@ -93,8 +93,9 @@ public class DatabaseManager {
         {
             return false;
         }
-        DataRow parameter = new DataRow(row.getName());
+        DataRow parameter = new DataRow(row.getAttribute("name").getValue());
         parameter.setTableName(row.getTableName());
+        parameter.addAttribute("userName", getUserName());
         if(!select(parameter).isEmpty())
         {
             ErrorDialog errorDialog = new ErrorDialog(true, "W bazie danych istnieje wpis o podanych parametrach.", "DatabaseManager", "insert(DataRow row)", "row");
@@ -103,10 +104,10 @@ public class DatabaseManager {
         }
         boolean result;
         row = addIdentifyingParameters(row);
-        DataRow removed = new DataRow();
+        DataRow removed = new DataRow(row.getTableName() + row.getAttribute("name").getValue());
         removed.setTableName("removedData");
         removed.addAttribute("tableName", row.tableName);
-        removed.addAttribute("name", row.name);
+        removed.addAttribute("objectName", row.getAttribute("name").getValue());
         removed.addAttribute("userName", userName);
         try
         {
@@ -161,10 +162,10 @@ public class DatabaseManager {
         }
         boolean result;
         row = addIdentifyingParameters(row);
-        DataRow removed = new DataRow();
+        DataRow removed = new DataRow(row.getTableName() + row.getName());
         removed.setTableName("removedData");
         removed.addAttribute("tableName", row.tableName);
-        removed.addAttribute("name", row.name);
+        removed.addAttribute("objectName", row.getAttribute("name").getValue());
         removed = addIdentifyingParameters(removed);
         try
         {
@@ -209,10 +210,10 @@ public class DatabaseManager {
             return false;
         }
         boolean result;
-        DataRow removed = new DataRow();
+        DataRow removed = new DataRow(row.getTableName() + row.getName());
         removed.setTableName("removedData");
         removed.addAttribute("tableName", row.tableName);
-        removed.addAttribute("name", row.name);
+        removed.addAttribute("objectName", row.name);
         try
         {
             result = local.insert(row);
@@ -291,10 +292,10 @@ public class DatabaseManager {
                 }
                 if(!updated)
                 {
-                    DataRow removed = new DataRow();
+                    DataRow removed = new DataRow(serv.getTableName() + serv.getName());
                     removed.setTableName("removedData");
                     removed.addAttribute("tableName", serv.tableName);
-                    removed.addAttribute("name", serv.name);
+                    removed.addAttribute("objectName", serv.name);
                     removed.addAttribute("userName", userName);
                     if(local.select(removed).isEmpty())
                     {
@@ -332,10 +333,10 @@ public class DatabaseManager {
             {
                 for(DataRow loc : locals)
                 {
-                    DataRow removed = new DataRow();
+                    DataRow removed = new DataRow(loc.getTableName() + loc.getName());
                     removed.setTableName("removedData");
                     removed.addAttribute("tableName", loc.tableName);
-                    removed.addAttribute("name", loc.name);
+                    removed.addAttribute("objectName", loc.name);
                     removed.addAttribute("userName", userName);
                     if(server.select(removed).isEmpty())
                     {
@@ -374,7 +375,7 @@ public class DatabaseManager {
     {
         DataRow row = new  DataRow();
         row.setTableName("users");
-        row.addAttribute("userName", userName);
+        row.addAttribute("name", userName);
         
         if(local.select(row).isEmpty())
         {
@@ -397,5 +398,10 @@ public class DatabaseManager {
     public boolean isAtrribute(String typ)
     {
         return local.checkTable(typ);
+    }
+    
+    public String getUserName()
+    {
+        return userName;
     }
 }
